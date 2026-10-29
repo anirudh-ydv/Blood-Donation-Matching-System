@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intelligent Blood Donation Matching System</title>
+<style>
+:root{--bg:#f6f4f1;--card:#fff;--ink:#1d2430;--mut:#657080;--line:#e3ded8;--red:#c8102e;--navy:#1f3a5f;--ok:#2e7d5b;--warn:#b7791f;--chip:#efe9e3;--bad:#b42318;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181f;--card:#1d232d;--ink:#e8ebf0;--mut:#98a2b3;--line:#2c3441;--red:#ff6b7d;--navy:#8fb3e8;--ok:#4cc38a;--warn:#e2b155;--chip:#262e3a;--bad:#ff8a7a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14181f;--card:#1d232d;--ink:#e8ebf0;--mut:#98a2b3;--line:#2c3441;--red:#ff6b7d;--navy:#8fb3e8;--ok:#4cc38a;--warn:#e2b155;--chip:#262e3a;--bad:#ff8a7a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--navy);color:#fff;padding:16px 16px 12px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) header{background:#243349}}
+:root[data-theme="dark"] header{background:#243349}
+header h1{margin:0;font:700 19px/1.25 Georgia,"Times New Roman",serif}
+header p{margin:4px 0 0;font-size:12.5px;opacity:.85}
+#th{background:transparent;border:1px solid #ffffff55;color:#fff;border-radius:8px;padding:4px 9px;cursor:pointer;font-size:15px}
+nav{display:flex;gap:4px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--line);padding:0 8px;position:sticky;top:0;z-index:5}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:11px 12px;font:600 14px inherit;color:var(--mut);cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--red);border-color:var(--red)}
+main{max-width:860px;margin:0 auto;padding:14px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+label{display:flex;flex-direction:column;font-size:12.5px;color:var(--mut);gap:4px;font-weight:600}
+select,input{font:15px inherit;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+.btn{background:var(--red);color:#fff;border:0;border-radius:9px;padding:10px 16px;font:700 15px inherit;cursor:pointer}
+.btn.g{background:var(--chip);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.chip{background:var(--chip);border-radius:20px;padding:3px 10px;font-size:12.5px}
+.chip.b{background:var(--navy);color:#fff}.chip.r{color:var(--bad)}
+.dn{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.rk{font:700 20px Georgia,serif;color:var(--red);min-width:34px}
+.bd{flex:1;min-width:0}.mt{font-size:12.5px;color:var(--mut)}
+.bg{background:var(--red);color:#fff;border-radius:6px;padding:1px 7px;font-weight:700;font-size:13px;margin-left:4px}
+.sc{text-align:right;font-size:12px;color:var(--mut)}.sc b{display:block;font-size:17px;color:var(--ink)}
+.bar{display:flex;height:7px;background:var(--chip);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%}
+.lg{font-size:11.5px;color:var(--mut);margin:2px 0 10px}.lg u{text-decoration:none;display:inline-block;width:9px;height:9px;border-radius:2px;margin:0 3px 0 8px}
+.sm{background:none;border:1px solid var(--line);color:var(--navy);border-radius:7px;padding:2px 8px;font-size:12px;cursor:pointer;margin-top:4px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;white-space:nowrap}
+th{background:var(--chip)}td.y{background:#2e7d5b33;text-align:center;font-weight:700;color:var(--ok)}td.h{outline:2px solid var(--red)}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.st div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.st b{display:block;font:700 26px Georgia,serif;color:var(--red)}.st span{font-size:12.5px;color:var(--mut)}
+h2{font:700 17px Georgia,serif;margin:0 0 8px;color:var(--navy)}h3{font-size:14px;margin:12px 0 4px}
+code{background:var(--chip);padding:1px 5px;border-radius:5px;font-size:12.5px}
+.note{font-size:12.5px;color:var(--mut)}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);max-width:min(440px,92vw);padding:16px}
+dialog::backdrop{background:#0008}
+.ck{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ok{color:var(--ok);font-weight:700}.no{color:var(--bad);font-weight:700}
+</style>
+</head>
+<body>
+<header>
+<div><h1>Intelligent Blood Donation Matching System</h1>
+<p>Rule-based screening + heuristic Best First Search · AI project · demo on synthetic data</p></div>
+<button id="th" title="Switch light/dark theme" aria-label="Switch theme">◐</button>
+</header>
+<nav id="tabs">
+<button class="on" data-t="match">Find donors</button><button data-t="donors">Donor database</button>
+<button data-t="compat">Compatibility</button><button data-t="eval">Evaluation</button><button data-t="about">How it works</button>
+</nav>
+<main>
+<section id="t-match" class="on">
+<div class="card">
+<div class="row">
+<label>Recipient blood group<select id="grp"></select></label>
+<label>Urgency<select id="urg"><option value="normal">Normal</option><option value="critical">Critical (emergency)</option></select></label>
+<label>Show top<select id="topk"><option>3</option><option selected>5</option><option>10</option></select></label>
+</div>
+<button class="btn" id="go">Find donors</button>
+</div>
+<div id="sum" class="chips"></div>
+<div id="res"></div>
+<details class="card" id="rej"><summary id="rejs"></summary><div id="rejl"></div></details>
+<p class="note">Decision-support prototype using synthetic data. Final donor selection and cross-matching must be confirmed by qualified medical staff.</p>
+</section>
+
+<section id="t-donors">
+<div class="card"><h2>Add a donor</h2>
+<div class="row">
+<label>Blood group<select id="ng"></select></label><label>Age<input id="na" type="number" value="28" min="1" max="99"></label>
+<label>Weight (kg)<input id="nw" type="number" value="60" min="20" max="200"></label><label>Hemoglobin (g/dL)<input id="nh" type="number" value="13.5" step="0.1"></label>
+<label>Distance (km)<input id="nd" type="number" value="5" step="0.1" min="0"></label><label>Days since last donation<input id="nl" type="number" value="200" min="0"></label>
+<label>Available<select id="nv"><option value="1">Yes</option><option value="0">No</option></select></label>
+</div>
+<button class="btn" id="add">Add donor</button> <button class="btn g" id="reset">Reset to sample data</button>
+<p class="note">Donors you add are kept in this browser only. A value of 999 days means no recent donation on record.</p></div>
+<div class="card"><label style="max-width:200px">Filter by blood group<select id="fg"></select></label>
+<div class="tw"><table id="dt"></table></div></div>
+</section>
+
+<section id="t-compat"><div class="card"><h2>Red-cell compatibility (donor → recipient)</h2>
+<p class="note">A ✓ means the donor’s antigens are a subset of the recipient’s. The column of the selected recipient group is outlined.</p>
+<div class="tw"><table id="ct"></table></div><p class="note" id="cn"></p></div></section>
+
+<section id="t-eval"><div class="card"><h2>Evaluation of the heuristic</h2>
+<p class="note">Each weight is changed by ±0.10 (12 variants) for all 16 requests (8 blood groups × 2 urgency levels), and the result is compared with a distance-only ranking. It runs live on the current donor list.</p>
+<div class="st" id="es"></div><div class="tw"><table id="et"></table></div><p class="note" id="en"></p></div></section>
+
+<section id="t-about"><div class="card"><h2>How it works</h2>
+<p><b>Pipeline:</b> Blood request → donor facts → forward chaining (rules R1–R3) → eligible donors → heuristic score h → Best First Search (priority queue) → ranked list with reasons.</p>
+<h3>Knowledge base (Unit 3)</h3>
+<p><code>R1</code> compatible(d) → blood_ok(d)<br><code>R2</code> age_ok ∧ weight_ok ∧ hb_ok ∧ gap_ok → medically_eligible(d)<br><code>R3</code> blood_ok ∧ medically_eligible ∧ available → candidate(d)</p>
+<p class="note">Thresholds (NBTC donor-selection guidance): age 18–65, weight ≥ 45 kg (350 ml collection), hemoglobin ≥ 12.5 g/dL, at least 90 days since the last donation.</p>
+<h3>Heuristic and search (Units 1–2)</h3>
+<p><code>h = w<sub>d</sub>·(km/30) + w<sub>m</sub>·match + w<sub>r</sub>·max(0, 1 − days/180)</code> — lower is better.<br>
+Weights (distance / match / rest): normal 0.40 / 0.35 / 0.25; critical 0.65 / 0.20 / 0.15. Match = 0 for the same group, 0.5 for another compatible group, 1 when scarce O− would be used for a different group.</p>
+</div></section>
+</main>
+<dialog id="dlg"><div id="dlgb"></div><p style="text-align:right;margin:10px 0 0"><button class="btn g" id="dlgx">Close</button></p></dialog>
+
+<script>
+/*ENGINE*/
+const RAW=[["D001","B+",18,89,12.4,7.3,"y",60],["D002","A+",19,43,11.5,7.6,"y",120],["D003","B+",61,76,13.1,13.9,"y",30],["D004","B+",27,86,13.1,8.9,"y",250],["D005","O+",41,48,12.8,10.8,"y",30],["D006","B+",51,49,15.9,11.9,"y",250],["D007","A+",62,46,11.2,7.5,"y",60],["D008","B+",23,66,12.4,19.4,"y",95],["D009","A-",30,84,12.3,28.2,"y",95],["D010","A+",32,52,13.3,8.7,"y",250],["D011","B+",66,45,12.1,1.7,"y",400],["D012","O+",30,78,15.4,10.0,"n",400],["D013","B+",58,71,11.7,4.9,"y",400],["D014","B+",42,65,12.1,29.9,"n",60],["D015","B+",24,51,14.1,23.9,"n",60],["D016","A+",55,71,13.6,29.2,"y",60],["D017","B+",51,90,12.3,19.5,"y",180],["D018","A+",46,42,15.8,26.4,"y",95],["D019","A+",23,82,12.5,19.5,"y",95],["D020","A-",27,76,15.8,27.7,"y",250],["D021","A+",24,65,15.4,25.1,"y",120],["D022","O+",53,47,11.4,15.0,"y",95],["D023","O+",47,77,11.8,16.2,"n",120],["D024","AB-",65,88,14.4,21.6,"n",250],["D025","A+",50,70,11.6,7.4,"y",30],["D026","A+",31,79,12.1,2.9,"y",120],["D027","O+",19,63,11.4,7.7,"n",120],["D028","A+",63,78,13.9,7.9,"n",400],["D029","O+",23,84,13.2,13.2,"n",30],["D030","B+",58,48,11.3,22.1,"y",120],["D031","O+",51,70,11.7,6.2,"n",120],["D032","B+",21,70,15.0,25.8,"y",30],["D033","B+",51,95,11.1,3.5,"y",95],["D034","A+",47,55,15.3,27.2,"y",400],["D035","O-",41,58,15.6,23.7,"y",400],["D036","B+",63,92,13.8,21.8,"y",120],["D037","O+",20,79,14.7,2.6,"y",30],["D038","O+",47,74,15.6,16.3,"y",60],["D039","B+",21,80,11.3,26.0,"n",60],["D040","AB+",53,57,13.9,2.0,"y",400]];
+const ANT={"O-":[],"O+":["Rh"],"A-":["A"],"A+":["A","Rh"],"B-":["B"],"B+":["B","Rh"],"AB-":["A","B"],"AB+":["A","B","Rh"]};
+const GS=Object.keys(ANT),CFG={minAge:18,maxAge:65,minWt:45,minHb:12.5,gap:90},MAXD=30,REST=180;
+const W={normal:{d:.40,m:.35,r:.25},critical:{d:.65,m:.20,r:.15}};
+const RULES=[["R1",["compatible"],"blood_ok"],["R2",["age_ok","weight_ok","hb_ok","gap_ok"],"medically_eligible"],["R3",["blood_ok","medically_eligible","available"],"candidate"]];
+const rnd=x=>Math.round(x*1e4)/1e4;
+const compat=(dg,rg)=>ANT[dg].every(a=>ANT[rg].includes(a));
+function sample(){return RAW.map(r=>({id:r[0],g:r[1],age:r[2],wt:r[3],hb:r[4],km:r[5],av:r[6]==="y",days:r[7]}))}
+function baseFacts(d,g){const f=new Set(),i=d.id;
+if(compat(d.g,g))f.add("compatible:"+i);
+if(d.age>=CFG.minAge&&d.age<=CFG.maxAge)f.add("age_ok:"+i);
+if(d.wt>=CFG.minWt)f.add("weight_ok:"+i);
+if(d.hb>=CFG.minHb)f.add("hb_ok:"+i);
+if(d.days>=CFG.gap)f.add("gap_ok:"+i);
+if(d.av)f.add("available:"+i);return f}
+function chain(facts,ids){const fired=[];let ch=true;
+while(ch){ch=false;for(const[n,pre,con]of RULES)for(const i of ids){if(facts.has(con+":"+i))continue;
+if(pre.every(p=>facts.has(p+":"+i))){facts.add(con+":"+i);fired.push([n,i]);ch=true}}}
+return fired}
+function why(d,g){const f=[];
+if(!compat(d.g,g))f.push("blood group incompatible");
+if(!(d.age>=CFG.minAge&&d.age<=CFG.maxAge))f.push("age outside "+CFG.minAge+"–"+CFG.maxAge);
+if(d.wt<CFG.minWt)f.push("weight below "+CFG.minWt+" kg");
+if(d.hb<CFG.minHb)f.push("hemoglobin below "+CFG.minHb+" g/dL");
+if(d.days<CFG.gap)f.push("last donation under "+CFG.gap+" days ago");
+if(!d.av)f.push("donor not available");return f}
+function hs(d,g,u,w){const p=(w||W)[u],dist=Math.min(d.km/MAXD,1),m=d.g===g?0:d.g==="O-"?1:.5,rest=Math.max(0,1-d.days/REST);
+const parts=[p.d*dist,p.m*m,p.r*rest];return{h:rnd(parts[0]+parts[1]+parts[2]),parts}}
+class Heap{constructor(){this.a=[]}
+lt(x,y){return x[0]<y[0]||(x[0]===y[0]&&x[1]<y[1])}
+push(x){const a=this.a;a.push(x);let i=a.length-1;while(i>0){const p=(i-1)>>1;if(!this.lt(a[i],a[p]))break;[a[i],a[p]]=[a[p],a[i]];i=p}}
+pop(){const a=this.a,t=a[0],l=a.pop();if(a.length){a[0]=l;let i=0;for(;;){let m=i,c=2*i+1;if(c<a.length&&this.lt(a[c],a[m]))m=c;c++;if(c<a.length&&this.lt(a[c],a[m]))m=c;if(m===i)break;[a[i],a[m]]=[a[m],a[i]];i=m}}return t}
+get size(){return this.a.length}}
+function bfs(c,g,u,k,w){const hp=new Heap();c.forEach((d,i)=>{const s=hs(d,g,u,w);hp.push([s.h,i,d,s.parts])});
+const out=[];while(hp.size&&out.length<k){const[h,,d,parts]=hp.pop();out.push({d,h,parts})}return out}
+function match(donors,g,u,k,w){const facts=new Set();donors.forEach(d=>baseFacts(d,g).forEach(x=>facts.add(x)));
+chain(facts,donors.map(d=>d.id));
+const cand=donors.filter(d=>facts.has("candidate:"+d.id)),rej=donors.filter(d=>!facts.has("candidate:"+d.id)).map(d=>({d,why:why(d,g)}));
+return{ranked:bfs(cand,g,u,k,w),n:cand.length,rej}}
+function variants(){const v=[];for(const u of["normal","critical"])for(const k of["d","m","r"])for(const dl of[.1,-.1]){
+const w=JSON.parse(JSON.stringify(W));w[u][k]=Math.max(0,w[u][k]+dl);const t=w[u].d+w[u].m+w[u].r;
+for(const x in w[u])w[u][x]/=t;v.push([u,w])}return v}
+function evalAll(donors){const vs=variants(),rows=[];let st=0,same=0,solved=0;
+for(const g of GS)for(const u of["normal","critical"]){
+const m=match(donors,g,u,100),top=m.ranked[0]?m.ranked[0].d.id:null;
+if(!top){rows.push({g,u,n:m.n,top:null});continue}
+solved++;const runs=vs.filter(x=>x[0]===u).map(x=>match(donors,g,u,1,x[1]).ranked[0].d.id);
+const stab=runs.filter(r=>r===top).length/runs.length;
+let dm=m.ranked[0].d;m.ranked.forEach(r=>{if(r.d.km<dm.km)dm=r.d});
+st+=stab;same+=dm.id===top?1:0;rows.push({g,u,n:m.n,top,stab,dist:dm.id})}
+return{rows,solved,stab:solved?st/solved:0,same}}
+/*END*/
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let donors=null;
+try{const s=localStorage.getItem("bdm_donors");if(s)donors=JSON.parse(s)}catch(e){donors=null}
+if(!Array.isArray(donors)||!donors.length)donors=sample();
+const save=()=>{try{localStorage.setItem("bdm_donors",JSON.stringify(donors))}catch(e){}};
+const opts=(el,all)=>{el.innerHTML=(all?'<option value="">All</option>':"")+GS.map(g=>`<option>${g}</option>`).join("")};
+["#grp","#ng"].forEach(s=>opts($(s)));opts($("#fg"),true);$("#grp").value="A+";
+const last=d=>d.days>=999?"no recent donation":d.days+" days ago";
+const COL=["var(--navy)","var(--red)","var(--warn)"];
+
+function run(){
+const g=$("#grp").value,u=$("#urg").value,k=+$("#topk").value,m=match(donors,g,u,k);
+$("#sum").innerHTML=`<span class="chip b">${g} · ${u}</span><span class="chip">${m.n} eligible of ${donors.length}</span><span class="chip r">${m.rej.length} rejected</span>`;
+$("#res").innerHTML=m.ranked.length?`<div class="lg">Score bar: <u style="background:${COL[0]}"></u>distance <u style="background:${COL[1]}"></u>blood-group match <u style="background:${COL[2]}"></u>rest period</div>`+
+m.ranked.map((r,i)=>`<div class="dn"><div class="rk">#${i+1}</div><div class="bd"><b>${r.d.id}</b><span class="bg">${r.d.g}</span>
+<div class="mt">${r.d.km} km · last donation ${last(r.d)} · Hb ${r.d.hb} · ${r.d.wt} kg · ${r.d.age} y</div>
+<div class="bar">${r.parts.map((p,j)=>`<i style="width:${p*100}%;background:${COL[j]}"></i>`).join("")}</div></div>
+<div class="sc"><b>${r.h.toFixed(4)}</b>score h<br><button class="sm" data-why="${r.d.id}">Why?</button></div></div>`).join("")
+:`<div class="card"><b>No eligible donor found.</b><br>Escalate this request to the blood bank or widen the donor list.</div>`;
+$("#rejs").textContent=`Rejected donors and reasons (${m.rej.length})`;
+$("#rejl").innerHTML=m.rej.map(x=>`<div class="ck"><span><b>${x.d.id}</b> ${x.d.g}</span><span>${x.why.map(w=>`<span class="chip r">${w}</span>`).join(" ")} <button class="sm" data-why="${x.d.id}">Why?</button></span></div>`).join("")}
+
+function showWhy(id){
+const d=donors.find(x=>x.id===id),g=$("#grp").value;if(!d)return;
+const c=[["Blood group compatible",compat(d.g,g),d.g+" → "+g],["Age "+CFG.minAge+"–"+CFG.maxAge,d.age>=CFG.minAge&&d.age<=CFG.maxAge,d.age+" y"],
+["Weight ≥ "+CFG.minWt+" kg",d.wt>=CFG.minWt,d.wt+" kg"],["Hemoglobin ≥ "+CFG.minHb,d.hb>=CFG.minHb,d.hb+" g/dL"],
+["At least "+CFG.gap+" days since donation",d.days>=CFG.gap,d.days>=999?"none on record":d.days+" days"],["Available",d.av,d.av?"yes":"no"]];
+const f=baseFacts(d,g);chain(f,[id]);
+$("#dlgb").innerHTML=`<h2>Why ${id} (${d.g})?</h2>`+c.map(x=>`<div class="ck"><span>${x[0]}</span><span>${x[2]} <span class="${x[1]?"ok":"no"}">${x[1]?"✓":"✗"}</span></span></div>`).join("")+
+`<p class="note">Rules fired: ${RULES.map(r=>r[0]+(f.has(r[2]+":"+id)?" ✓":" ✗")).join(" · ")}. ${f.has("candidate:"+id)?"The donor is a candidate and is ranked by heuristic h.":"The donor is rejected."}</p>`;
+$("#dlg").showModal()}
+
+function drawDonors(){
+const fg=$("#fg").value,L=donors.filter(d=>!fg||d.g===fg);
+$("#dt").innerHTML="<tr><th>ID</th><th>Group</th><th>Age</th><th>kg</th><th>Hb</th><th>km</th><th>Avail.</th><th>Days</th></tr>"+
+L.map(d=>`<tr><td>${d.id}</td><td>${d.g}</td><td>${d.age}</td><td>${d.wt}</td><td>${d.hb}</td><td>${d.km}</td><td>${d.av?"Yes":"No"}</td><td>${d.days}</td></tr>`).join("")}
+
+function drawCompat(){
+const g=$("#grp").value;let n=0;
+$("#ct").innerHTML="<tr><th>Donor ↓ / Recipient →</th>"+GS.map(r=>`<th>${r}</th>`).join("")+"</tr>"+
+GS.map(dg=>`<tr><th>${dg}</th>`+GS.map(r=>{const y=compat(dg,r);if(y)n++;return`<td class="${y?"y":""} ${r===g?"h":""}">${y?"✓":""}</td>`}).join("")+"</tr>").join("");
+$("#cn").textContent=n+" of 64 donor–recipient pairs are compatible. O− gives to everyone; AB+ receives from everyone."}
+
+function drawEval(){
+const e=evalAll(donors);
+$("#es").innerHTML=`<div><b>${e.solved}/16</b><span>requests with an eligible donor</span></div><div><b>${Math.round(e.stab*100)}%</b><span>average top-donor stability under ±0.10 weight changes</span></div><div><b>${e.same}/${e.solved}</b><span>same top donor as a distance-only baseline</span></div>`;
+$("#et").innerHTML="<tr><th>Request</th><th>Eligible</th><th>Top donor</th><th>Stable</th><th>Distance-only</th></tr>"+
+e.rows.map(r=>r.top?`<tr><td>${r.g}, ${r.u}</td><td>${r.n}</td><td>${r.top}</td><td>${Math.round(r.stab*100)}%</td><td>${r.dist}${r.dist!==r.top?" (differs)":""}</td></tr>`:`<tr><td>${r.g}, ${r.u}</td><td>0</td><td colspan="3">no eligible donor</td></tr>`).join("");
+$("#en").textContent="Where the two differ, the baseline picks a nearer O− donor while the heuristic keeps scarce O− blood for patients who need it. These are design checks on synthetic data, not clinical accuracy."}
+
+function tab(t){$$("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$$("section").forEach(s=>s.classList.toggle("on",s.id==="t-"+t));
+if(t==="donors")drawDonors();if(t==="compat")drawCompat();if(t==="eval")drawEval();
+try{history.replaceState(null,"","#"+t)}catch(e){}window.scrollTo(0,0)}
+$$("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+["#grp","#urg","#topk"].forEach(s=>$(s).onchange=run);$("#go").onclick=run;$("#fg").onchange=drawDonors;
+document.addEventListener("click",e=>{const w=e.target.closest("[data-why]");if(w)showWhy(w.dataset.why)});
+$("#dlgx").onclick=()=>$("#dlg").close();
+$("#add").onclick=()=>{const n=donors.reduce((m,d)=>Math.max(m,+d.id.slice(1)||0),0)+1;
+donors.push({id:"D"+String(n).padStart(3,"0"),g:$("#ng").value,age:+$("#na").value,wt:+$("#nw").value,hb:+$("#nh").value,km:+$("#nd").value,av:$("#nv").value==="1",days:+$("#nl").value});
+save();drawDonors();run()};
+$("#reset").onclick=()=>{donors=sample();save();drawDonors();run()};
+$("#th").onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
+run();
+const h=(location.hash||"").slice(1);if(["donors","compat","eval","about"].includes(h))tab(h);
+</script>
+</body>
+</html>
